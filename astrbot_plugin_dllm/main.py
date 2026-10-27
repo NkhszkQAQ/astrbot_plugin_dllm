@@ -103,7 +103,9 @@ class DLLM(Star):
         if not self.roll():
             return
         self.logger.info("dllm 命中，本条只回 %r", DLLM_TEXT)
-        event.set_result(event.chain_result([Plain(DLLM_TEXT)]))
+        # 直接改原 result 的 chain：保留 result_content_type（LLM_RESULT）等元数据，
+        # 免得下游把 dllm 当成普通命令回复（分段/前缀/T2I 的处理会不一样）。
+        result.chain = [Plain(DLLM_TEXT)]
 
     @filter.command("dllm")
     async def cmd_dllm(self, event):

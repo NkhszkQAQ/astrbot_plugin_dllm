@@ -47,16 +47,28 @@ bot：从前有个……
 - `/dllm` 命令永远强制来一发，不受开关和概率影响。
 - 插件没有网络调用、不落盘、不读消息内容，只在发送前换链。
 
-### 本地测试（不需要装 AstrBot）
+### 测试
+
+**假运行时（不需要装 AstrBot）**
 
 ```bash
 cd test
 python3 play_dllm.py
 ```
 
-`test/fakes/` 是按 AstrBot v4 源码行为写的假运行时（`astrbot.api` / `astrbot.api.event` / `astrbot.api.star` / `astrbot.core.message`），`play_dllm.py` 用 importlib 直接加载**未修改的** `main.py`，跑 10 组场景：概率统计、命中替换、未命中保留、非 LLM 不触发、空链、开关、冷却、区间容错、`/dllm` 命令。
+`test/fakes/` 是按 AstrBot v4 源码行为写的假运行时（`astrbot.api` / `astrbot.api.event` / `astrbot.api.star` / `astrbot.core.message`），`play_dllm.py` 用 importlib 直接加载**未修改的** `main.py`，跑 10 组场景 25 项断言：概率统计、命中替换、`content_type` 保留、未命中保留、非 LLM 不触发、空链、开关、冷却、区间容错、`/dllm` 命令。
 
-> 说明：插件 API 是对照 AstrBot `master` 源码逐项核对的（`filter.on_decorating_result`、`event.get_result/set_result/chain_result`、`MessageEventResult.chain`、`Star.__init__(context, config)`），但本机没跑活体 AstrBot，所以验证止步于「源码对照 + 假运行时」。
+**真实 AstrBot 环境（不启动 bot，只 import 真模块）**
+
+```bash
+uv venv /tmp/astrbot_venv --python 3.12
+uv pip install --python /tmp/astrbot_venv/bin/python astrbot
+/tmp/astrbot_venv/bin/python test/test_real_astrbot.py
+```
+
+用真实的 `AstrMessageEvent` / `MessageEventResult` / `Plain` / `PlatformMetadata` 构造事件，覆盖构造、命中替换、`content_type` 保留、未命中保留、非 LLM 放行、概率统计、`/dllm`，10 项断言。
+
+> 已验证：AstrBot **4.29.3** 真环境 10/10 通过，假运行时 25/25 通过。没在完整启动的 bot 进程里接 QQ 平台跑过。
 
 ## DSH skill
 

@@ -115,6 +115,11 @@ async def s3_replace():
     check("chain 只剩一个组件", len(out.chain) == 1, str(out.chain))
     check("唯一组件是 Plain('dllm')", out.chain == [Plain("dllm")], repr(out.chain))
     check("纯文本正好是 dllm", out.get_plain_text() == "dllm", repr(out.get_plain_text()))
+    check(
+        "result_content_type 仍是 LLM_RESULT",
+        out.result_content_type == ResultContentType.LLM_RESULT,
+        str(out.result_content_type),
+    )
 
 
 async def s4_miss():
