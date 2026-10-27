@@ -42,7 +42,7 @@ class DLLM(Star):
         super().__init__(context)
         # AstrBot 的插件加载器会把 _conf_schema.json 生成的配置作为 config 传进来。
         self.config = config or {}
-        self._last_hit_at = 0.0
+        self._last_hit_at: float | None = None
 
     # ------------------------------------------------------------------ 配置
     def _cfg(self) -> dict:
@@ -75,6 +75,10 @@ class DLLM(Star):
         except (TypeError, ValueError):
             cooldown = 0.0
         if cooldown <= 0:
+            return True
+        # 初始状态（还没命中过）不能拿 monotonic() 和 0 比：刚开机的机器
+        # monotonic 可能小于冷却时长，会被误判成"还在冷却"。
+        if self._last_hit_at is None:
             return True
         return (time.monotonic() - self._last_hit_at) >= cooldown
 

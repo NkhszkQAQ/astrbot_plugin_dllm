@@ -173,6 +173,19 @@ async def s8_cooldown():
     p2 = make_plugin(Probability_Min=100, Probability_Max=100, Cooldown_Seconds=0)
     check("无冷却时可连续命中", p2.roll() and p2.roll())
 
+    # 回归：CI runner 刚开机时 monotonic() 可能小于冷却时长，
+    # 初始状态不能被误判成"还在冷却"（GitHub Actions 上真踩过）。
+    import time as time_module
+
+    orig = time_module.monotonic
+    time_module.monotonic = lambda: 10.0
+    try:
+        p3 = make_plugin(Probability_Min=100, Probability_Max=100, Cooldown_Seconds=60)
+        check("开机 10s 时首次命中不被冷却误伤", p3.roll() is True)
+        check("同一时刻第二次仍被冷却拦住", p3.roll() is False)
+    finally:
+        time_module.monotonic = orig
+
 
 async def s9_range():
     print("\n[9] 概率区间容错（Min > Max / 越界）")
