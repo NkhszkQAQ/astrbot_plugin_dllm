@@ -1,0 +1,33 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  fake-runtime:
+    name: fake runtime (no AstrBot install)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: run play_dllm.py
+        run: python3 test/play_dllm.py
+
+  real-astrbot:
+    name: real AstrBot (manual)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: install astrbot
+        run: pip install astrbot
+      - name: run test_real_astrbot.py
+        run: python3 test/test_real_astrbot.py

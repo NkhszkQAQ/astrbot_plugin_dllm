@@ -3,3 +3,4 @@ desc: 有 5-10% 的概率，AI 只回一个 dllm，其他什么都不说
 help: 概率区间、冷却时间和总开关在插件配置里；发送 /dllm 可手动强制触发一次
 version: v0.1.0
 author: nkhszk
+repo: https://github.com/NkhszkQAQ/astrbot_plugin_dllm

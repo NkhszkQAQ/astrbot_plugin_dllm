@@ -1,5 +1,7 @@
 # dllm
 
+[![test](https://github.com/NkhszkQAQ/astrbot_plugin_dllm/actions/workflows/test.yml/badge.svg)](https://github.com/NkhszkQAQ/astrbot_plugin_dllm/actions/workflows/test.yml)
+
 有 5-10% 的概率，AI 只回一个 `dllm`，其他什么都不说。
 
 ```
