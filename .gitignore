@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# AstrBot 测试运行时自动生成
+test/data/
