@@ -1,0 +1,26 @@
+{
+  "Enable": {
+    "description": "总开关",
+    "type": "bool",
+    "hint": "关掉后用 /dllm 手动触发仍然有效",
+    "default": true
+  },
+  "Probability_Min": {
+    "description": "最低概率（%）",
+    "type": "int",
+    "hint": "每次判定的概率在 Min 与 Max 之间随机取，默认 5",
+    "default": 5
+  },
+  "Probability_Max": {
+    "description": "最高概率（%）",
+    "type": "int",
+    "hint": "默认 10；写反了会自动排序",
+    "default": 10
+  },
+  "Cooldown_Seconds": {
+    "description": "冷却时间（秒）",
+    "type": "int",
+    "hint": "命中一次后 N 秒内不再触发，0 表示不冷却",
+    "default": 0
+  }
+}
