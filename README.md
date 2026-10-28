@@ -17,6 +17,7 @@ bot：从前有个……
 |---|---|---|
 | AstrBot 插件（真随机、全局生效） | `astrbot_plugin_dllm/` | QQ 机器人（NapCat / LLOneBot + AstrBot） |
 | DSH skill（提示词层） | `dllm-skill/SKILL.md` | DeepSeek Harness / 任何吃系统提示词的 AI 客户端 |
+| DSH 插件（真随机、不调模型） | `dsh-plugin/` | DeepSeek Harness |
 
 ## AstrBot 插件
 
@@ -82,6 +83,15 @@ DSH 没有消息钩子，这条走提示词层，行为等效物：
 - 「严格档」：每次最终回复前跑一次 `shuf -i 0-999 -n 1`，`< 70` 命中（≈7%），真随机但每条回复多一次工具调用。
 
 技术任务、代码、调试、危险操作提示不套；用户说「认真点」当场关。
+
+## DSH 插件
+
+`dsh-plugin/dllm.js`，挂 `agent/pre-step`。命中时跳过模型调用，直接写一条 `dllm` 回复，turn 以 `blocked` 结束。
+
+安装、配置和"修复版"说明见 [`dsh-plugin/README.md`](dsh-plugin/README.md)。
+
+> 早期版本只写一条孤立的 `assistant/message`，会话日志会在加载时校验失败，整个会话打不开。
+> 现在按 `step/start` → `assistant/message`（带 settlement 字段）→ `step/end` 写入。
 
 ## 名字
 
